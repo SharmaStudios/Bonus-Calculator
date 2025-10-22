@@ -1,0 +1,921 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>EMS Bonus Calculator — Complete Suite</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { 
+      background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #ec4899 100%); 
+      min-height: 100vh; 
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .card { 
+      background: rgba(255,255,255,0.98); 
+      backdrop-filter: blur(20px);
+      border-radius: 24px; 
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+    }
+    .tab { 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+    .tab:hover { transform: translateY(-2px); }
+    .tab.active { 
+      background: linear-gradient(135deg, #6366f1, #8b5cf6); 
+      color: #fff; 
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+    pre { 
+      background: linear-gradient(135deg, #1e293b, #0f172a); 
+      color: #a5f3fc; 
+      padding: 20px; 
+      border-radius: 16px; 
+      font-size: 13px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+    input, textarea, select {
+      transition: all 0.2s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+    }
+    .btn {
+      transition: all 0.2s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .config-card {
+      background: linear-gradient(135deg, #f0f9ff, #fae8ff);
+      border: 2px solid #e9d5ff;
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+    .config-card:hover {
+      box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
+      transform: translateY(-2px);
+    }
+    @media (max-width: 640px) {
+      .card { padding: 16px; border-radius: 16px; }
+      h1 { font-size: 24px; }
+      .tab { font-size: 13px; padding: 8px 12px; }
+      pre { font-size: 11px; padding: 12px; }
+    }
+  </style>
+</head>
+<body class="p-4 md:p-6 lg:p-8">
+  <div class="max-w-7xl mx-auto card p-4 md:p-6 lg:p-10">
+    <h1 class="text-3xl md:text-5xl font-black text-center mb-3 gradient-text">
+      🏥 EMS Bonus Calculator
+    </h1>
+    <p class="text-center text-gray-600 mb-6 md:mb-8 text-sm md:text-base">Labtech • Medical • Ambulance • Students • RO • FTO • High Command</p>
+
+    <!-- Top Settings -->
+    <div class="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-4 md:p-6 mb-6 border-2 border-purple-100">
+      <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+        <span>⚙️</span> Global Settings
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+        <div>
+          <label class="text-xs md:text-sm font-semibold text-gray-700 block mb-1">Role Mentions</label>
+          <input id="roles" class="w-full px-3 md:px-4 py-2 md:py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 outline-none text-sm" value="<@&914800296679583784> <@&889769208567705630>">
+        </div>
+        <div>
+          <label class="text-xs md:text-sm font-semibold text-gray-700 block mb-1">Chief Mention ID</label>
+          <input id="author" class="w-full px-3 md:px-4 py-2 md:py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 outline-none text-sm" value="<@851784213707358218>">
+        </div>
+        <div>
+          <label class="text-xs md:text-sm font-semibold text-gray-700 block mb-1">Date Title</label>
+          <input id="dateTitle" class="w-full px-3 md:px-4 py-2 md:py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 outline-none text-sm" value="22nd October Bonuses">
+        </div>
+        <div>
+          <label class="text-xs md:text-sm font-semibold text-gray-700 block mb-1">Header Title</label>
+          <input id="headerTitle" class="w-full px-3 md:px-4 py-2 md:py-2.5 border-2 border-purple-200 rounded-xl focus:border-purple-500 outline-none text-sm" value="Daily Bonus">
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-3 mt-4">
+        <button id="saveAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm md:text-base">💾 Save All</button>
+        <button id="clearAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 text-white text-sm md:text-base">🗑️ Clear All</button>
+        <span id="status" class="text-xs md:text-sm font-bold flex items-center"></span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <div class="tab active px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="labtech">🧪 Labtech</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="medical">🏥 Medical</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="ambulance">🚑 Ambulance</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="students">🩺 Students</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="ro">🚁 RO</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="fto">🥼 FTO</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="hc">👑 High Command</div>
+      <div class="tab px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-slate-200 text-xs md:text-sm" data-tab="config">⚙️ Config</div>
+    </div>
+
+    <!-- LABTECH -->
+    <section id="tab-labtech" class="space-y-4">
+      <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🧪 Labtech Department:</strong> Cascading tier bonuses (Tier 1 → Tier 2 → Tier 3 → Base). Edit rates in Config tab.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw Labtech Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Formats: "ID - 3 cap 1 deli" or "ID - Captchas Completed: 10 Deliveries Made : 5"</p>
+        <textarea id="rawLabtech" rows="8" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="766208029867507722 - 3 Cap 1 deli"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genLabtech" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyLabtech" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outLabtech" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- MEDICAL -->
+    <section id="tab-medical" class="space-y-4 hidden">
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🏥 Medical Department:</strong> Pillbox Hill (PH1/PH2) and Sandy Shores (SH) with Day/Night/Late-Night shifts. Can do lobby or on-calls.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw Medical Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 8H PH2 Night", "ID - 6H On Calls Day", "ID - 2H SH Late Night"</p>
+        <textarea id="rawMedical" rows="10" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="1380134924815831162 - 8H PH2 Night"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genMedical" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyMedical" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outMedical" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- AMBULANCE -->
+    <section id="tab-ambulance" class="space-y-4 hidden">
+      <div class="bg-red-50 border-2 border-red-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🚑 Ambulance Service:</strong> On-call hours and lobby shifts. Can do any lobby or on-calls.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw Ambulance Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 2H On Calls Day", "ID - 1H PH1 Night", "ID - 3H SH Day"</p>
+        <textarea id="rawAmbulance" rows="8" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="927033962478579712 - 2H On Calls Day"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genAmbulance" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyAmbulance" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outAmbulance" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- STUDENTS -->
+    <section id="tab-students" class="space-y-4 hidden">
+      <div class="bg-green-50 border-2 border-green-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🩺 Medical Students:</strong> Simplified hourly payouts. Can do any lobby or on-calls.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw Students Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 2H PH Day + 6H On Calls Day"</p>
+        <textarea id="rawStudents" rows="10" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="697135966636212376 - 2H PH Day + 6H On Calls Day"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genStudents" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyStudents" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outStudents" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- RO -->
+    <section id="tab-ro" class="space-y-4 hidden">
+      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🚁 Rescue Operations:</strong> Scripted and Unscripted operations. Can also do any lobby or on-calls.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw RO Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Format: "ID - 1 Scripted 5 Unscripted" or "ID - 2 Scripted" or "ID - 3 Unscripted"</p>
+        <textarea id="rawRO" rows="8" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="500805924227645451 - 1 Scripted 5 Unscripted"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genRO" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyRO" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outRO" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- FTO -->
+    <section id="tab-fto" class="space-y-4 hidden">
+      <div class="bg-orange-50 border-2 border-orange-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>🥼 Field Training Officer:</strong> Training bonuses for Day 1, Day 2, Labtech, and Refresher sessions. FTO cannot do lobby/on-calls/standby.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw FTO Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Format: "ID - 4 Day 1 6 Day 2 2 Labtech" or "ID - 5 Day 1"</p>
+        <textarea id="rawFTO" rows="8" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="1255776282843807802 - 4 Day 1"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genFTO" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyFTO" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outFTO" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- HIGH COMMAND -->
+    <section id="tab-hc" class="space-y-4 hidden">
+      <div class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>👑 High Command:</strong> Same as Medical/Ambulance + Standby shifts. Can do lobby, on-calls, or standby.
+      </div>
+      <div>
+        <label class="font-bold text-sm md:text-base block mb-2">📋 Raw High Command Data</label>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 8H PH2 Night + 2H Standby", "ID - 5H On Calls Day", "ID - 3H Standby"</p>
+        <textarea id="rawHC" rows="10" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="500805924227645451 - 28H PH1 Day"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="genHC" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm md:text-base">🚀 Generate</button>
+        <button id="copyHC" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm md:text-base">📋 Copy</button>
+      </div>
+      <pre id="outHC" class="overflow-auto max-h-96"></pre>
+    </section>
+
+    <!-- CONFIG -->
+    <section id="tab-config" class="space-y-6 hidden overflow-y-auto" style="max-height: 70vh;">
+      <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
+        <strong>⚙️ Configuration:</strong> Edit all payouts and thresholds. Click Save All to persist.
+      </div>
+
+      <!-- Labtech Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🧪 Labtech Bonus Tiers</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div class="p-3 md:p-4 border-2 border-purple-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">🥇 Tier 1</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Bonus $ <input id="lab_t1_bonus" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="110000"></label>
+              <label class="text-xs md:text-sm">Captchas <input id="lab_t1_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="16"></label>
+              <label class="text-xs md:text-sm">Deliveries <input id="lab_t1_del" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="7"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-blue-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">🥈 Tier 2</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Bonus $ <input id="lab_t2_bonus" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="60000"></label>
+              <label class="text-xs md:text-sm">Captchas <input id="lab_t2_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="8"></label>
+              <label class="text-xs md:text-sm">Deliveries <input id="lab_t2_del" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="4"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-orange-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">🥉 Tier 3</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Bonus $ <input id="lab_t3_bonus" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="40000"></label>
+              <label class="text-xs md:text-sm">Captchas <input id="lab_t3_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="6"></label>
+              <label class="text-xs md:text-sm">Deliveries <input id="lab_t3_del" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="3"></label>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 md:mt-4">
+          <label class="text-xs md:text-sm font-semibold">Base per Captcha $ <input id="lab_base_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="8000"></label>
+          <label class="text-xs md:text-sm font-semibold">Base per Delivery $ <input id="lab_base_del" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="5000"></label>
+        </div>
+      </div>
+
+      <!-- Medical Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🏥 Medical Department Hourly Payouts</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div class="p-3 md:p-4 border-2 border-blue-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">Pillbox Hill (PH1)</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day 1h $ <input id="med_ph1_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
+              <label class="text-xs md:text-sm">Day 2h $ <input id="med_ph1_day_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
+              <label class="text-xs md:text-sm">Night 1h $ <input id="med_ph1_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+              <label class="text-xs md:text-sm">Night 2h $ <input id="med_ph1_night_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="35000"></label>
+              <label class="text-xs md:text-sm">Late 1h $ <input id="med_ph1_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
+              <label class="text-xs md:text-sm">Late 2h $ <input id="med_ph1_late_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="55000"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-blue-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">Pillbox Hill (PH2)</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day 1h $ <input id="med_ph2_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
+              <label class="text-xs md:text-sm">Day 2h $ <input id="med_ph2_day_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
+              <label class="text-xs md:text-sm">Night 1h $ <input id="med_ph2_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+              <label class="text-xs md:text-sm">Night 2h $ <input id="med_ph2_night_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="35000"></label>
+              <label class="text-xs md:text-sm">Late 1h $ <input id="med_ph2_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
+              <label class="text-xs md:text-sm">Late 2h $ <input id="med_ph2_late_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="55000"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">Sandy Shores (SH)</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day 1h $ <input id="med_sh_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+              <label class="text-xs md:text-sm">Day 2h $ <input id="med_sh_day_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="35000"></label>
+              <label class="text-xs md:text-sm">Night 1h $ <input id="med_sh_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="20000"></label>
+              <label class="text-xs md:text-sm">Night 2h $ <input id="med_sh_night_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="40000"></label>
+              <label class="text-xs md:text-sm">Late 1h $ <input id="med_sh_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="35000"></label>
+              <label class="text-xs md:text-sm">Late 2h $ <input id="med_sh_late_2h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="70000"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ambulance Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🚑 Ambulance Service</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <label class="text-xs md:text-sm font-semibold">Day per hour $ <input id="amb_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="10000"></label>
+          <label class="text-xs md:text-sm font-semibold">Night per hour $ <input id="amb_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="20000"></label>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">💡 Ambulance can also do lobby shifts (PH1/PH2/SH) using Medical Department rates.</p>
+      </div>
+
+      <!-- Students Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🩺 Medical Students Hourly Rates</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">Pillbox (PH)</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_ph_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
+              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_ph_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+              <label class="text-xs md:text-sm">Late per hour $ <input id="stu_ph_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">Sandy (SH)</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_sh_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_sh_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="20000"></label>
+              <label class="text-xs md:text-sm">Late per hour $ <input id="stu_sh_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
+            </div>
+          </div>
+          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
+            <div class="font-semibold mb-2 text-sm md:text-base">On Calls</div>
+            <div class="space-y-2">
+              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_calls_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
+              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_calls_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RO Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🚁 Rescue Operations</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <label class="text-xs md:text-sm font-semibold">Unscripted $ <input id="ro_unscripted" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="15000"></label>
+          <label class="text-xs md:text-sm font-semibold">Scripted $ <input id="ro_scripted" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">💡 RO can also do lobby or on-calls using Medical/Ambulance rates.</p>
+      </div>
+
+      <!-- FTO Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🥼 Field Training Officer</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <label class="text-xs md:text-sm font-semibold">Day 1 $ <input id="fto_day1" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="40000"></label>
+          <label class="text-xs md:text-sm font-semibold">Day 2 $ <input id="fto_day2" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="35000"></label>
+          <label class="text-xs md:text-sm font-semibold">Labtech $ <input id="fto_labtech" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
+          <label class="text-xs md:text-sm font-semibold">Refresher $ <input id="fto_refresher" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">⚠️ FTO cannot do lobby, on-calls, or standby.</p>
+      </div>
+
+      <!-- HC Config -->
+      <div class="config-card">
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">👑 High Command</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <label class="text-xs md:text-sm font-semibold">Standby per hour $ <input id="hc_standby" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">💡 HC can do lobby, on-calls using Medical/Ambulance rates, plus standby shifts (HC-only).</p>
+      </div>
+
+      <div class="pt-2">
+        <button id="saveConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm md:text-base">💾 Save Configuration</button>
+      </div>
+    </section>
+  </div>
+
+<script>
+/* Persistence */
+const KEY = 'ems_bonus_v2';
+const RAW_KEYS = {lab:'raw_lab',med:'raw_med',amb:'raw_amb',stu:'raw_stu',ro:'raw_ro',fto:'raw_fto',hc:'raw_hc'};
+
+function saveAll(){
+  const cfg=gatherConfig();
+  const head={roles:qs('#roles').value,author:qs('#author').value,dateTitle:qs('#dateTitle').value,headerTitle:qs('#headerTitle').value};
+  localStorage.setItem(KEY,JSON.stringify({cfg,head}));
+  for(const[k,v]of Object.entries(RAW_KEYS))localStorage.setItem(v,qs('#raw'+k.charAt(0).toUpperCase()+k.slice(1)).value||'');
+  setStatus('✅ Saved','text-green-600');
+}
+
+function loadAll(){
+  try{
+    const s=localStorage.getItem(KEY);
+    if(s){const{cfg,head}=JSON.parse(s);applyConfig(cfg);if(head){qs('#roles').value=head.roles||'';qs('#author').value=head.author||'';qs('#dateTitle').value=head.dateTitle||'';qs('#headerTitle').value=head.headerTitle||'';}}
+    qs('#rawLabtech').value=localStorage.getItem(RAW_KEYS.lab)||'';
+    qs('#rawMedical').value=localStorage.getItem(RAW_KEYS.med)||'';
+    qs('#rawAmbulance').value=localStorage.getItem(RAW_KEYS.amb)||'';
+    qs('#rawStudents').value=localStorage.getItem(RAW_KEYS.stu)||'';
+    qs('#rawRO').value=localStorage.getItem(RAW_KEYS.ro)||'';
+    qs('#rawFTO').value=localStorage.getItem(RAW_KEYS.fto)||'';
+    qs('#rawHC').value=localStorage.getItem(RAW_KEYS.hc)||'';
+  }catch(e){}
+}
+
+function clearAll(){
+  if(!confirm('Clear all saved data?'))return;
+  localStorage.removeItem(KEY);
+  for(const v of Object.values(RAW_KEYS))localStorage.removeItem(v);
+  location.reload();
+}
+
+function setStatus(msg,cls){
+  const el=qs('#status');
+  el.textContent=msg;
+  el.className='text-xs md:text-sm font-bold flex items-center '+(cls||'');
+  setTimeout(()=>el.textContent='',2500);
+}
+
+function qs(s){return document.querySelector(s);}
+function qsa(s){return[...document.querySelectorAll(s)];}
+function toMoney(n){return'$'+(n||0).toLocaleString();}
+function num(s){return parseInt(qs(s).value||'0',10);}
+function val(s,v){if(v!==undefined)qs(s).value=v;}
+
+function gatherConfig(){
+  return{
+    lab:{t1:{bonus:num('#lab_t1_bonus'),cap:num('#lab_t1_cap'),del:num('#lab_t1_del')},t2:{bonus:num('#lab_t2_bonus'),cap:num('#lab_t2_cap'),del:num('#lab_t2_del')},t3:{bonus:num('#lab_t3_bonus'),cap:num('#lab_t3_cap'),del:num('#lab_t3_del')},baseCap:num('#lab_base_cap'),baseDel:num('#lab_base_del')},
+    med:{ph1:{day:{h1:num('#med_ph1_day_1h'),h2:num('#med_ph1_day_2h')},night:{h1:num('#med_ph1_night_1h'),h2:num('#med_ph1_night_2h')},late:{h1:num('#med_ph1_late_1h'),h2:num('#med_ph1_late_2h')}},ph2:{day:{h1:num('#med_ph2_day_1h'),h2:num('#med_ph2_day_2h')},night:{h1:num('#med_ph2_night_1h'),h2:num('#med_ph2_night_2h')},late:{h1:num('#med_ph2_late_1h'),h2:num('#med_ph2_late_2h')}},sh:{day:{h1:num('#med_sh_day_1h'),h2:num('#med_sh_day_2h')},night:{h1:num('#med_sh_night_1h'),h2:num('#med_sh_night_2h')},late:{h1:num('#med_sh_late_1h'),h2:num('#med_sh_late_2h')}}},
+    amb:{day:num('#amb_day_1h'),night:num('#amb_night_1h')},
+    stu:{ph:{day:num('#stu_ph_day_1h'),night:num('#stu_ph_night_1h'),late:num('#stu_ph_late_1h')},sh:{day:num('#stu_sh_day_1h'),night:num('#stu_sh_night_1h'),late:num('#stu_sh_late_1h')},calls:{day:num('#stu_calls_day_1h'),night:num('#stu_calls_night_1h')}},
+    ro:{unscripted:num('#ro_unscripted'),scripted:num('#ro_scripted')},
+    fto:{day1:num('#fto_day1'),day2:num('#fto_day2'),labtech:num('#fto_labtech'),refresher:num('#fto_refresher')},
+    hc:{standby:num('#hc_standby')}
+  };
+}
+
+function applyConfig(c){
+  if(!c)return;
+  if(c.lab){val('#lab_t1_bonus',c.lab.t1.bonus);val('#lab_t1_cap',c.lab.t1.cap);val('#lab_t1_del',c.lab.t1.del);val('#lab_t2_bonus',c.lab.t2.bonus);val('#lab_t2_cap',c.lab.t2.cap);val('#lab_t2_del',c.lab.t2.del);val('#lab_t3_bonus',c.lab.t3.bonus);val('#lab_t3_cap',c.lab.t3.cap);val('#lab_t3_del',c.lab.t3.del);val('#lab_base_cap',c.lab.baseCap);val('#lab_base_del',c.lab.baseDel);}
+  if(c.med){const m=c.med;val('#med_ph1_day_1h',m.ph1.day.h1);val('#med_ph1_day_2h',m.ph1.day.h2);val('#med_ph1_night_1h',m.ph1.night.h1);val('#med_ph1_night_2h',m.ph1.night.h2);val('#med_ph1_late_1h',m.ph1.late.h1);val('#med_ph1_late_2h',m.ph1.late.h2);val('#med_ph2_day_1h',m.ph2.day.h1);val('#med_ph2_day_2h',m.ph2.day.h2);val('#med_ph2_night_1h',m.ph2.night.h1);val('#med_ph2_night_2h',m.ph2.night.h2);val('#med_ph2_late_1h',m.ph2.late.h1);val('#med_ph2_late_2h',m.ph2.late.h2);val('#med_sh_day_1h',m.sh.day.h1);val('#med_sh_day_2h',m.sh.day.h2);val('#med_sh_night_1h',m.sh.night.h1);val('#med_sh_night_2h',m.sh.night.h2);val('#med_sh_late_1h',m.sh.late.h1);val('#med_sh_late_2h',m.sh.late.h2);}
+  if(c.amb){val('#amb_day_1h',c.amb.day);val('#amb_night_1h',c.amb.night);}
+  if(c.stu){val('#stu_ph_day_1h',c.stu.ph.day);val('#stu_ph_night_1h',c.stu.ph.night);val('#stu_ph_late_1h',c.stu.ph.late);val('#stu_sh_day_1h',c.stu.sh.day);val('#stu_sh_night_1h',c.stu.sh.night);val('#stu_sh_late_1h',c.stu.sh.late);val('#stu_calls_day_1h',c.stu.calls.day);val('#stu_calls_night_1h',c.stu.calls.night);}
+  if(c.ro){val('#ro_unscripted',c.ro.unscripted);val('#ro_scripted',c.ro.scripted);}
+  if(c.fto){val('#fto_day1',c.fto.day1);val('#fto_day2',c.fto.day2);val('#fto_labtech',c.fto.labtech);val('#fto_refresher',c.fto.refresher);}
+  if(c.hc){val('#hc_standby',c.hc.standby);}
+}
+
+/* Tabs */
+qsa('.tab').forEach(t=>t.addEventListener('click',()=>{
+  qsa('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  qsa('section[id^="tab-"]').forEach(s=>s.classList.add('hidden'));
+  qs('#tab-'+t.dataset.tab).classList.remove('hidden');
+}));
+
+/* Parsing */
+function parseIdPair(line){
+  const idx=line.indexOf('-');
+  if(idx===-1)return null;
+  const id=line.slice(0,idx).trim();
+  const rest=line.slice(idx+1).trim();
+  if(!/^\d+$/.test(id))return null;
+  return{id,rest};
+}
+
+function parseLabtechLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const r=pair.rest.toLowerCase();
+  let m1=r.match(/(\d+)\s*cap[^0-9]*(\d+)\s*del/);
+  if(m1)return{id:pair.id,caps:parseInt(m1[1]),dels:parseInt(m1[2])};
+  let m2=r.match(/captchas\s*completed\s*:\s*(\d+)[^\d]+deliveries\s*made\s*:?\s*(\d+)/);
+  if(m2)return{id:pair.id,caps:parseInt(m2[1]),dels:parseInt(m2[2])};
+  return null;
+}
+
+function parseMedicalLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const r=pair.rest.replace(/\s+/g,' ').trim();
+  const m=r.match(/(\d+)\s*h\s+([a-z0-9 ]+?)\s+(day|night|late\s*night)/i);
+  if(!m)return null;
+  return{id:pair.id,hours:parseInt(m[1]),place:m[2].trim().toUpperCase(),shift:m[3].toLowerCase().replace(/\s+/g,' ')};
+}
+
+function parseAmbulanceLine(line){return parseMedicalLine(line);}
+
+function parseStudentsLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const chunks=pair.rest.split('+').map(s=>s.trim()).filter(Boolean);
+  const items=[];
+  for(const c of chunks){
+    const m=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)\s+(day|night|late\s*night)/i);
+    if(m)items.push({id:pair.id,hours:parseInt(m[1]),place:m[2].trim().toUpperCase(),shift:m[3].toLowerCase().replace(/\s+/g,' ')});
+  }
+  return items.length?items:null;
+}
+
+function parseROLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const r=pair.rest.toLowerCase();
+  const m=r.match(/(?:(\d+)\s*scripted)?[^\d]*(?:(\d+)\s*unscripted)?/);
+  if(!m)return null;
+  const scripted=m[1]?parseInt(m[1]):0;
+  const unscripted=m[2]?parseInt(m[2]):0;
+  if(scripted===0&&unscripted===0)return null;
+  return{id:pair.id,scripted,unscripted};
+}
+
+function parseFTOLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const r=pair.rest.toLowerCase();
+  const day1M=r.match(/(\d+)\s*day\s*1/);
+  const day2M=r.match(/(\d+)\s*day\s*2/);
+  const labtechM=r.match(/(\d+)\s*labtech/);
+  const refresherM=r.match(/(\d+)\s*refresher/);
+  const day1=day1M?parseInt(day1M[1]):0;
+  const day2=day2M?parseInt(day2M[1]):0;
+  const labtech=labtechM?parseInt(labtechM[1]):0;
+  const refresher=refresherM?parseInt(refresherM[1]):0;
+  if(day1===0&&day2===0&&labtech===0&&refresher===0)return null;
+  return{id:pair.id,day1,day2,labtech,refresher};
+}
+
+function parseHCLine(line){
+  const pair=parseIdPair(line.trim());
+  if(!pair)return null;
+  const chunks=pair.rest.split('+').map(s=>s.trim()).filter(Boolean);
+  const items=[];
+  for(const c of chunks){
+    const m=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)(?:\s+(day|night|late\s*night))?/i);
+    if(m){
+      const hours=parseInt(m[1]);
+      const place=m[2].trim().toUpperCase();
+      const shift=(m[3]||'day').toLowerCase().replace(/\s+/g,' ');
+      items.push({id:pair.id,hours,place,shift});
+    }
+  }
+  return items.length?items:null;
+}
+
+/* Labtech Logic */
+function labtechCascade(totalCaps,totalDels,cfg){
+  let rc=totalCaps,rd=totalDels,parts=[],total=0;
+  while(rc>=cfg.t1.cap&&rd>=cfg.t1.del){total+=cfg.t1.bonus;parts.push(`🥇 **Tier 1 Bonus — ${toMoney(cfg.t1.bonus)}** 🥇`);rc-=cfg.t1.cap;rd-=cfg.t1.del;}
+  while(rc>=cfg.t2.cap&&rd>=cfg.t2.del){total+=cfg.t2.bonus;parts.push(`🥈 **Tier 2 Bonus — ${toMoney(cfg.t2.bonus)}** 🥈`);rc-=cfg.t2.cap;rd-=cfg.t2.del;}
+  while(rc>=cfg.t3.cap&&rd>=cfg.t3.del){total+=cfg.t3.bonus;parts.push(`🥉 **Tier 3 Bonus — ${toMoney(cfg.t3.bonus)}** 🥉`);rc-=cfg.t3.cap;rd-=cfg.t3.del;}
+  if(rc>0){total+=rc*cfg.baseCap;parts.push(`(${rc} Captchas × ${toMoney(cfg.baseCap)} = ${toMoney(rc*cfg.baseCap)})`);}
+  if(rd>0){total+=rd*cfg.baseDel;parts.push(`(${rd} Deliveries × ${toMoney(cfg.baseDel)} = ${toMoney(rd*cfg.baseDel)})`);}
+  return{parts,total};
+}
+
+/* Medical/Amb/HC/Stu shared logic */
+function calcDutyHours(items,cfg){
+  const byUser={};
+  for(const it of items){
+    if(!byUser[it.id])byUser[it.id]=[];
+    byUser[it.id].push(it);
+  }
+  const lines=[];
+  let grand=0;
+  for(const id of Object.keys(byUser)){
+    const group={};
+    for(const e of byUser[id]){
+      const key=e.place+'|'+e.shift;
+      group[key]=(group[key]||0)+e.hours;
+    }
+    let total=0;
+    const segments=[];
+    for(const[key,hours]of Object.entries(group)){
+      const[place,shift]=key.split('|');
+      const h=hours;
+      if(place==='STANDBY'){
+        const per=cfg.hc?cfg.hc.standby:0;
+        total+=h*per;
+        segments.push(`${h}H Standby = ${toMoney(h*per)}`);
+      }else if(place==='ON CALLS'){
+        const rate=(shift==='night')?cfg.amb.night:cfg.amb.day;
+        const val=h*rate;
+        total+=val;
+        segments.push(`${h}H On Calls ${title(shift)} = ${toMoney(val)}`);
+      }else if(place==='PH1'||place==='PH2'||place==='SH'){
+        const p=(place==='PH1')?cfg.med.ph1:(place==='PH2')?cfg.med.ph2:cfg.med.sh;
+        const tier=(shift==='day')?p.day:(shift==='night')?p.night||p.day:(shift==='late night')?p.late||p.day:p.day;
+        let left=h;
+        const isLate=(place!=='SH')&&(shift==='late night');
+        const twoBonus=(isLate?p.late.h2:tier.h2)||0;
+        const oneBonus=(isLate?p.late.h1:tier.h1)||0;
+        while(left>=2&&twoBonus>0){
+          total+=twoBonus;
+          segments.push(`2H ${place} ${title(shift)} = ${toMoney(twoBonus)}`);
+          left-=2;
+        }
+        if(left===1&&oneBonus>0){
+          total+=oneBonus;
+          segments.push(`1H ${place} ${title(shift)} = ${toMoney(oneBonus)}`);
+          left-=1;
+        }
+        if(left>0){
+          segments.push(`${left}H ${place} ${title(shift)} (no payout rule)`);
+        }
+      }else{
+        segments.push(`${h}H ${place} ${title(shift)} (unknown)`);
+      }
+    }
+    grand+=total;
+    lines.push({id,desc:segments.join(' + '),total});
+  }
+  return{lines,grand};
+}
+
+/* Students calc */
+function studentsCalc(allItems,cfg){
+  const byUser={};
+  for(const items of allItems){
+    if(items){
+      for(const it of items){
+        if(!byUser[it.id])byUser[it.id]=[];
+        byUser[it.id].push(it);
+      }
+    }
+  }
+  const lines=[];
+  let grand=0;
+  for(const id of Object.keys(byUser)){
+    let total=0;
+    const seg=[];
+    for(const it of byUser[id]){
+      let per=0;
+      if(it.place==='PH')per=it.shift==='night'?cfg.stu.ph.night:it.shift==='late night'?cfg.stu.ph.late:cfg.stu.ph.day;
+      else if(it.place==='SH')per=it.shift==='night'?cfg.stu.sh.night:it.shift==='late night'?cfg.stu.sh.late:cfg.stu.sh.day;
+      else if(it.place==='ON CALLS')per=it.shift==='night'?cfg.stu.calls.night:cfg.stu.calls.day;
+      const val=it.hours*per;
+      total+=val;
+      seg.push(`${it.hours}H ${it.place} ${title(it.shift)} = ${toMoney(val)}`);
+    }
+    grand+=total;
+    lines.push({id,desc:seg.join(' + '),total});
+  }
+  return{lines,grand};
+}
+
+/* RO calc */
+function roCalc(items,cfg){
+  const byUser={};
+  for(const it of items){
+    if(!byUser[it.id])byUser[it.id]={scripted:0,unscripted:0};
+    byUser[it.id].scripted+=it.scripted;
+    byUser[it.id].unscripted+=it.unscripted;
+  }
+  const lines=[];
+  let grand=0;
+  for(const id of Object.keys(byUser)){
+    const s=byUser[id].scripted;
+    const u=byUser[id].unscripted;
+    const total=s*cfg.ro.scripted+u*cfg.ro.unscripted;
+    grand+=total;
+    const parts=[];
+    if(s>0)parts.push(`${s} Scripted`);
+    if(u>0)parts.push(`${u} Unscripted`);
+    lines.push({id,desc:parts.join(' + '),total});
+  }
+  return{lines,grand};
+}
+
+/* FTO calc */
+function ftoCalc(items,cfg){
+  const byUser={};
+  for(const it of items){
+    if(!byUser[it.id])byUser[it.id]={day1:0,day2:0,labtech:0,refresher:0};
+    byUser[it.id].day1+=it.day1;
+    byUser[it.id].day2+=it.day2;
+    byUser[it.id].labtech+=it.labtech;
+    byUser[it.id].refresher+=it.refresher;
+  }
+  const lines=[];
+  let grand=0;
+  for(const id of Object.keys(byUser)){
+    const d1=byUser[id].day1;
+    const d2=byUser[id].day2;
+    const lab=byUser[id].labtech;
+    const ref=byUser[id].refresher;
+    const total=d1*cfg.fto.day1+d2*cfg.fto.day2+lab*cfg.fto.labtech+ref*cfg.fto.refresher;
+    grand+=total;
+    const parts=[];
+    if(d1>0)parts.push(`${d1}x Day 1`);
+    if(d2>0)parts.push(`${d2}x Day 2`);
+    if(lab>0)parts.push(`${lab}x Labtech`);
+    if(ref>0)parts.push(`${ref}x Refresher`);
+    lines.push({id,desc:parts.join(' + '),total});
+  }
+  return{lines,grand};
+}
+
+/* Generators */
+function generateHeader(){
+  const roles=qs('#roles').value||'';
+  const dateTitle=qs('#dateTitle').value||'Bonuses';
+  const headerTitle=qs('#headerTitle').value||'Daily Bonus';
+  return[`# 💸 ${headerTitle} For ${roles} 💸`,`# 📆 ${dateTitle}`,'','==================================================================',''];
+}
+function generateFooter(grand){
+  const author=qs('#author').value||'';
+  return['==================================================================  ',`💸 **Final Total: ${toMoney(grand)}** 💸 ${author}  `,'📩 **Bonus missing?** DM me with logs or bodycam proof'];
+}
+function title(s){return s.split(' ').map(x=>x[0].toUpperCase()+x.slice(1)).join(' ');}
+
+/* Labtech generate */
+qs('#genLabtech').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawLabtech').value||'').split('\n');
+  const sum={};
+  const order=[];
+  for(const ln of lines){
+    const p=parseLabtechLine(ln);
+    if(!p)continue;
+    if(!sum[p.id]){sum[p.id]={caps:0,dels:0};order.push(p.id);}
+    sum[p.id].caps+=p.caps;sum[p.id].dels+=p.dels;
+  }
+  let out=[...generateHeader()];
+  let grand=0;
+  for(const id of order){
+    const tot=labtechCascade(sum[id].caps,sum[id].dels,cfg.lab);
+    grand+=tot.total;
+    out.push(`<@${id}> — (${sum[id].caps} Captchas + ${sum[id].dels} Deliveries)  `);
+    if(tot.parts.some(p=>p.includes('Tier'))){
+      tot.parts.forEach(p=>out.push(p+'  '));
+      out.push(`**= ${toMoney(tot.total)}**`);
+    }else{
+      const capB=sum[id].caps*cfg.lab.baseCap;
+      const delB=sum[id].dels*cfg.lab.baseDel;
+      out.push(`**${toMoney(capB)} + ${toMoney(delB)} = ${toMoney(capB+delB)}**`);
+    }
+    out.push('');
+  }
+  out.push(...generateFooter(grand));
+  qs('#outLabtech').textContent=out.join('\n');
+  setStatus('✅ Labtech generated','text-green-600');
+});
+
+/* Medical generate */
+qs('#genMedical').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawMedical').value||'').split('\n');
+  const items=[];
+  for(const ln of lines){
+    const p=parseMedicalLine(ln);
+    if(p)items.push(p);
+  }
+  const{lines:rows,grand}=calcDutyHours(items,cfg);
+  let out=[...generateHeader()];
+  for(const r of rows){
+    out.push(`<@${r.id}>  - ${toMoney(r.total)} (${r.desc})`);
+  }
+  out.push(...generateFooter(grand));
+  qs('#outMedical').textContent=out.join('\n');
+  setStatus('✅ Medical generated','text-green-600');
+});
+
+/* Ambulance generate */
+qs('#genAmbulance').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawAmbulance').value||'').split('\n');
+  const items=[];
+  for(const ln of lines){
+    const p=parseAmbulanceLine(ln);
+    if(p)items.push(p);
+  }
+  const{lines:rows,grand}=calcDutyHours(items,cfg);
+  let out=[`# <:EMS_Star:1319031331673342033>  Daily Bonuses For Ambulance Service  <:EMS_Star:1319031331673342033>`,'','==================================================================',''];
+  for(const r of rows){
+    out.push(`<@${r.id}> - ${toMoney(r.total)} (${r.desc})`);
+  }
+  out.push(...generateFooter(grand));
+  qs('#outAmbulance').textContent=out.join('\n');
+  setStatus('✅ Ambulance generated','text-green-600');
+});
+
+/* Students generate */
+qs('#genStudents').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawStudents').value||'').split('\n');
+  const packages=[];
+  for(const ln of lines){
+    const items=parseStudentsLine(ln);
+    if(items)packages.push(items);
+  }
+  const{lines:rows,grand}=studentsCalc(packages,cfg);
+  let out=[`# 💸  Daily Bonus For <@&816985266115444756> 💸`,'','==================================================================',''];
+  for(const r of rows){
+    out.push(`<@${r.id}> — [${r.desc}] — **${toMoney(r.total)}**`);
+  }
+  out.push(...generateFooter(grand));
+  qs('#outStudents').textContent=out.join('\n');
+  setStatus('✅ Students generated','text-green-600');
+});
+
+/* RO generate */
+qs('#genRO').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawRO').value||'').split('\n');
+  const items=[];
+  for(const ln of lines){
+    const p=parseROLine(ln);
+    if(p)items.push(p);
+  }
+  const{lines:rows,grand}=roCalc(items,cfg);
+  const author=qs('#author').value||'';
+  let out=[`#  💸 🚁 Daily Bonus For <@&1306990366939021453> 🚁 💸`,`#  📆 ${qs('#dateTitle').value||'Bonuses'}`,'','==================================================================',''];
+  for(const r of rows){
+    out.push(`<@${r.id}>  – ${toMoney(r.total)} (${r.desc})`);
+  }
+  out.push('==================================================================','📩 Bonus missing? DM me with logs or bodycam proof','',`#  💰 Final Total: ${toMoney(grand)} 💰 <@&816725923810377758> Chief § Kizil Stonefield`);
+  qs('#outRO').textContent=out.join('\n');
+  setStatus('✅ RO generated','text-green-600');
+});
+
+/* FTO generate */
+qs('#genFTO').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawFTO').value||'').split('\n');
+  const items=[];
+  for(const ln of lines){
+    const p=parseFTOLine(ln);
+    if(p)items.push(p);
+  }
+  const{lines:rows,grand}=ftoCalc(items,cfg);
+  const author=qs('#author').value||'';
+  let out=[`# **💸 Bonuses For <@&1090597883650252911>  🥼**`,'---------------------------------------------------------',`🗓️ Date: **${qs('#dateTitle').value||''}**`,''];
+  for(const r of rows){
+    out.push(`<@${r.id}> - ${toMoney(r.total)} (${r.desc})`);
+  }
+  out.push('','---------------------------------------------------------','','🔴 Note: If you face any kind of bonus issue feel free to send me a DM anytime with valid Proof.',`# 💸 Final Total: ${toMoney(grand)} 💸 ${author}`);
+  qs('#outFTO').textContent=out.join('\n');
+  setStatus('✅ FTO generated','text-green-600');
+});
+
+/* HC generate */
+qs('#genHC').addEventListener('click',()=>{
+  const cfg=gatherConfig();
+  const lines=(qs('#rawHC').value||'').split('\n');
+  const packages=[];
+  for(const ln of lines){
+    const items=parseHCLine(ln);
+    if(items)packages.push(items);
+  }
+  const allItems=[];
+  for(const pkg of packages){
+    for(const it of pkg)allItems.push(it);
+  }
+  const{lines:rows,grand}=calcDutyHours(allItems,cfg);
+  const author=qs('#author').value||'';
+  let out=[`**Daily Bonus For <@&908284082566365194> **`,'',` **🗓️ ${qs('#dateTitle').value||''}**`,'','===================================================================',''];
+  for(const r of rows){
+    const totalH=r.desc.match(/\d+H/g)?.reduce((sum,m)=>sum+parseInt(m),0)||0;
+    out.push(` <:EMS_Star:1319031331673342033> <@${r.id}>  - ${toMoney(r.total)} (${totalH} Hours Duty)`,'','===================================================================','');
+  }
+  out.push('',`   🤑 🤑 💸  ${toMoney(grand)}💸   🤑 🤑`,'',author,'','🔴  Please check this channel; the bonuses are calculated as per the new bonus system as confirmed by the chief.','','KEEP EMS ON TOP <:EMS_On_Top:940940834050818079>');
+  qs('#outHC').textContent=out.join('\n');
+  setStatus('✅ HC generated','text-green-600');
+});
+
+/* Copy buttons */
+qs('#copyLabtech').addEventListener('click',()=>copy('#outLabtech'));
+qs('#copyMedical').addEventListener('click',()=>copy('#outMedical'));
+qs('#copyAmbulance').addEventListener('click',()=>copy('#outAmbulance'));
+qs('#copyStudents').addEventListener('click',()=>copy('#outStudents'));
+qs('#copyRO').addEventListener('click',()=>copy('#outRO'));
+qs('#copyFTO').addEventListener('click',()=>copy('#outFTO'));
+qs('#copyHC').addEventListener('click',()=>copy('#outHC'));
+
+function copy(sel){
+  const txt=qs(sel).textContent||'';
+  if(!txt){setStatus('⚠️ Nothing to copy','text-yellow-600');return;}
+  navigator.clipboard.writeText(txt).then(()=>setStatus('✅ Copied!','text-green-600'));
+}
+
+/* Config Save */
+qs('#saveConfig').addEventListener('click',saveAll);
+qs('#saveAll').addEventListener('click',saveAll);
+qs('#clearAll').addEventListener('click',clearAll);
+
+/* Init */
+loadAll();
+</script>
+</body>
+</html>
