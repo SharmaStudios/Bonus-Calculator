@@ -112,6 +112,7 @@
       </div>
       <div class="flex flex-wrap gap-3 mt-4">
         <button id="saveAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm md:text-base">💾 Save All</button>
+        <button id="syncCloud" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm md:text-base">☁️ Sync Cloud</button>
         <button id="clearAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 text-white text-sm md:text-base">🗑️ Clear All</button>
         <span id="status" class="text-xs md:text-sm font-bold flex items-center"></span>
       </div>
@@ -183,11 +184,11 @@
     <!-- STUDENTS -->
     <section id="tab-students" class="space-y-4 hidden">
       <div class="bg-green-50 border-2 border-green-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
-        <strong>🩺 Medical Students:</strong> Simplified hourly payouts. Can do any lobby or on-calls.
+        <strong>🩺 Medical Students:</strong> Same rates as Medical Department (PH1/PH2/SH + On Calls). Can do lobby or on-calls but NOT FTO/Standby/RO.
       </div>
       <div>
         <label class="font-bold text-sm md:text-base block mb-2">📋 Raw Students Data</label>
-        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 2H PH Day + 6H On Calls Day"</p>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 2H PH Day + 6H On Calls Day", "ID - 8H PH2 Night"</p>
         <textarea id="rawStudents" rows="10" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="697135966636212376 - 2H PH Day + 6H On Calls Day"></textarea>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -200,11 +201,11 @@
     <!-- RO -->
     <section id="tab-ro" class="space-y-4 hidden">
       <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
-        <strong>🚁 Rescue Operations:</strong> Scripted and Unscripted operations. Can also do any lobby or on-calls.
+        <strong>🚁 Rescue Operations:</strong> Scripted and Unscripted operations. Can also do ANY lobby (PH1/PH2/SH) or on-calls.
       </div>
       <div>
         <label class="font-bold text-sm md:text-base block mb-2">📋 Raw RO Data</label>
-        <p class="text-xs md:text-sm text-gray-600 mb-2">Format: "ID - 1 Scripted 5 Unscripted" or "ID - 2 Scripted" or "ID - 3 Unscripted"</p>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 1 Scripted 5 Unscripted" or "ID - 8H PH1 Day + 2 Scripted" or "ID - 5H On Calls Night"</p>
         <textarea id="rawRO" rows="8" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="500805924227645451 - 1 Scripted 5 Unscripted"></textarea>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -234,11 +235,11 @@
     <!-- HIGH COMMAND -->
     <section id="tab-hc" class="space-y-4 hidden">
       <div class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
-        <strong>👑 High Command:</strong> Same as Medical/Ambulance + Standby shifts. Can do lobby, on-calls, or standby.
+        <strong>👑 High Command:</strong> Same as Medical/Ambulance + Standby shifts. Can do ANY lobby (PH1/PH2/SH), on-calls, or standby.
       </div>
       <div>
         <label class="font-bold text-sm md:text-base block mb-2">📋 Raw High Command Data</label>
-        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 8H PH2 Night + 2H Standby", "ID - 5H On Calls Day", "ID - 3H Standby"</p>
+        <p class="text-xs md:text-sm text-gray-600 mb-2">Examples: "ID - 28H PH1 Day" or "ID - 8H PH2 Night + 2H Standby" or "ID - 5H On Calls Day"</p>
         <textarea id="rawHC" rows="10" class="w-full font-mono text-xs md:text-sm px-3 md:px-4 py-2 md:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 outline-none" placeholder="500805924227645451 - 28H PH1 Day"></textarea>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -251,7 +252,7 @@
     <!-- CONFIG -->
     <section id="tab-config" class="space-y-6 hidden overflow-y-auto" style="max-height: 70vh;">
       <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
-        <strong>⚙️ Configuration:</strong> Edit all payouts and thresholds. Click Save All to persist.
+        <strong>⚙️ Configuration:</strong> Edit all payouts and thresholds. Medical Students use Medical Department rates. Click Save All or Sync Cloud to persist globally.
       </div>
 
       <!-- Labtech Config -->
@@ -291,7 +292,7 @@
 
       <!-- Medical Config -->
       <div class="config-card">
-        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🏥 Medical Department Hourly Payouts</h3>
+        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🏥 Medical Department Hourly Payouts <span class="text-sm font-normal text-gray-600">(also used by Medical Students, RO, HC)</span></h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           <div class="p-3 md:p-4 border-2 border-blue-200 rounded-xl bg-white">
             <div class="font-semibold mb-2 text-sm md:text-base">Pillbox Hill (PH1)</div>
@@ -339,36 +340,6 @@
         <p class="text-xs text-gray-600 mt-2">💡 Ambulance can also do lobby shifts (PH1/PH2/SH) using Medical Department rates.</p>
       </div>
 
-      <!-- Students Config -->
-      <div class="config-card">
-        <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🩺 Medical Students Hourly Rates</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
-            <div class="font-semibold mb-2 text-sm md:text-base">Pillbox (PH)</div>
-            <div class="space-y-2">
-              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_ph_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
-              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_ph_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
-              <label class="text-xs md:text-sm">Late per hour $ <input id="stu_ph_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="25000"></label>
-            </div>
-          </div>
-          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
-            <div class="font-semibold mb-2 text-sm md:text-base">Sandy (SH)</div>
-            <div class="space-y-2">
-              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_sh_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
-              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_sh_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="20000"></label>
-              <label class="text-xs md:text-sm">Late per hour $ <input id="stu_sh_late_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="15000"></label>
-            </div>
-          </div>
-          <div class="p-3 md:p-4 border-2 border-green-200 rounded-xl bg-white">
-            <div class="font-semibold mb-2 text-sm md:text-base">On Calls</div>
-            <div class="space-y-2">
-              <label class="text-xs md:text-sm">Day per hour $ <input id="stu_calls_day_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
-              <label class="text-xs md:text-sm">Night per hour $ <input id="stu_calls_night_1h" type="number" class="w-full border-2 rounded-lg px-2 py-1 text-xs mt-1" value="10000"></label>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- RO Config -->
       <div class="config-card">
         <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4">🚁 Rescue Operations</h3>
@@ -376,7 +347,7 @@
           <label class="text-xs md:text-sm font-semibold">Unscripted $ <input id="ro_unscripted" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="15000"></label>
           <label class="text-xs md:text-sm font-semibold">Scripted $ <input id="ro_scripted" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
         </div>
-        <p class="text-xs text-gray-600 mt-2">💡 RO can also do lobby or on-calls using Medical/Ambulance rates.</p>
+        <p class="text-xs text-gray-600 mt-2">💡 RO can also do ANY lobby (PH1/PH2/SH) or on-calls using Medical/Ambulance rates.</p>
       </div>
 
       <!-- FTO Config -->
@@ -397,26 +368,71 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <label class="text-xs md:text-sm font-semibold">Standby per hour $ <input id="hc_standby" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="25000"></label>
         </div>
-        <p class="text-xs text-gray-600 mt-2">💡 HC can do lobby, on-calls using Medical/Ambulance rates, plus standby shifts (HC-only).</p>
+        <p class="text-xs text-gray-600 mt-2">💡 HC can do ANY lobby (PH1/PH2/SH), on-calls using Medical/Ambulance rates, plus standby shifts (HC-only).</p>
       </div>
 
-      <div class="pt-2">
+      <div class="pt-2 flex gap-3">
         <button id="saveConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm md:text-base">💾 Save Configuration</button>
+        <button id="exportConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm md:text-base">📥 Export Config</button>
       </div>
     </section>
   </div>
 
 <script>
+/* Cloud Storage via JSONBin.io (free, GitHub Pages compatible) */
+const JSONBIN_API = 'https://api.jsonbin.io/v3/b';
+const JSONBIN_BIN_ID = '68f9308eae596e708f24bf0b'; // Create your bin at jsonbin.io
+const JSONBIN_KEY = '$2a$10$KbuiEOeV0xOm35GrS85/f.Ndm7KKCH/RXglKmAWGjiDPDc2dYR4.a'; // Replace with your API key
+
 /* Persistence */
-const KEY = 'ems_bonus_v2';
-const RAW_KEYS = {lab:'raw_lab',med:'raw_med',amb:'raw_amb',stu:'raw_stu',ro:'raw_ro',fto:'raw_fto',hc:'raw_hc'};
+const KEY='ems_bonus_v3';
+const RAW_KEYS={lab:'raw_lab',med:'raw_med',amb:'raw_amb',stu:'raw_stu',ro:'raw_ro',fto:'raw_fto',hc:'raw_hc'};
+
+async function syncCloud(){
+  try{
+    setStatus('☁️ Syncing...','text-blue-600');
+    const cfg=gatherConfig();
+    const head={roles:qs('#roles').value,author:qs('#author').value,dateTitle:qs('#dateTitle').value,headerTitle:qs('#headerTitle').value};
+    
+    // Try to load from cloud first
+    try{
+      const resp = await fetch(`${JSONBIN_API}/${JSONBIN_BIN_ID}/latest`, {
+        headers: {'X-Access-Key': JSONBIN_KEY}
+      });
+      if(resp.ok){
+        const data = await resp.json();
+        if(data.record && data.record.cfg){
+          applyConfig(data.record.cfg);
+          setStatus('☁️ Loaded from cloud','text-green-600');
+          return;
+        }
+      }
+    }catch(e){}
+    
+    // If load fails, save to cloud
+    await fetch(`${JSONBIN_API}/${JSONBIN_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Key': JSONBIN_KEY
+      },
+      body: JSON.stringify({cfg, head, timestamp: Date.now()})
+    });
+    
+    localStorage.setItem(KEY,JSON.stringify({cfg,head}));
+    setStatus('☁️ Synced to cloud','text-green-600');
+  }catch(e){
+    setStatus('❌ Cloud sync failed, using local','text-red-600');
+    saveAll();
+  }
+}
 
 function saveAll(){
   const cfg=gatherConfig();
   const head={roles:qs('#roles').value,author:qs('#author').value,dateTitle:qs('#dateTitle').value,headerTitle:qs('#headerTitle').value};
   localStorage.setItem(KEY,JSON.stringify({cfg,head}));
   for(const[k,v]of Object.entries(RAW_KEYS))localStorage.setItem(v,qs('#raw'+k.charAt(0).toUpperCase()+k.slice(1)).value||'');
-  setStatus('✅ Saved','text-green-600');
+  setStatus('✅ Saved locally','text-green-600');
 }
 
 function loadAll(){
@@ -440,11 +456,22 @@ function clearAll(){
   location.reload();
 }
 
+function exportConfig(){
+  const cfg=gatherConfig();
+  const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='ems-config.json';
+  a.click();
+  setStatus('📥 Config exported','text-green-600');
+}
+
 function setStatus(msg,cls){
   const el=qs('#status');
   el.textContent=msg;
   el.className='text-xs md:text-sm font-bold flex items-center '+(cls||'');
-  setTimeout(()=>el.textContent='',2500);
+  setTimeout(()=>el.textContent='',3000);
 }
 
 function qs(s){return document.querySelector(s);}
@@ -458,7 +485,6 @@ function gatherConfig(){
     lab:{t1:{bonus:num('#lab_t1_bonus'),cap:num('#lab_t1_cap'),del:num('#lab_t1_del')},t2:{bonus:num('#lab_t2_bonus'),cap:num('#lab_t2_cap'),del:num('#lab_t2_del')},t3:{bonus:num('#lab_t3_bonus'),cap:num('#lab_t3_cap'),del:num('#lab_t3_del')},baseCap:num('#lab_base_cap'),baseDel:num('#lab_base_del')},
     med:{ph1:{day:{h1:num('#med_ph1_day_1h'),h2:num('#med_ph1_day_2h')},night:{h1:num('#med_ph1_night_1h'),h2:num('#med_ph1_night_2h')},late:{h1:num('#med_ph1_late_1h'),h2:num('#med_ph1_late_2h')}},ph2:{day:{h1:num('#med_ph2_day_1h'),h2:num('#med_ph2_day_2h')},night:{h1:num('#med_ph2_night_1h'),h2:num('#med_ph2_night_2h')},late:{h1:num('#med_ph2_late_1h'),h2:num('#med_ph2_late_2h')}},sh:{day:{h1:num('#med_sh_day_1h'),h2:num('#med_sh_day_2h')},night:{h1:num('#med_sh_night_1h'),h2:num('#med_sh_night_2h')},late:{h1:num('#med_sh_late_1h'),h2:num('#med_sh_late_2h')}}},
     amb:{day:num('#amb_day_1h'),night:num('#amb_night_1h')},
-    stu:{ph:{day:num('#stu_ph_day_1h'),night:num('#stu_ph_night_1h'),late:num('#stu_ph_late_1h')},sh:{day:num('#stu_sh_day_1h'),night:num('#stu_sh_night_1h'),late:num('#stu_sh_late_1h')},calls:{day:num('#stu_calls_day_1h'),night:num('#stu_calls_night_1h')}},
     ro:{unscripted:num('#ro_unscripted'),scripted:num('#ro_scripted')},
     fto:{day1:num('#fto_day1'),day2:num('#fto_day2'),labtech:num('#fto_labtech'),refresher:num('#fto_refresher')},
     hc:{standby:num('#hc_standby')}
@@ -470,7 +496,6 @@ function applyConfig(c){
   if(c.lab){val('#lab_t1_bonus',c.lab.t1.bonus);val('#lab_t1_cap',c.lab.t1.cap);val('#lab_t1_del',c.lab.t1.del);val('#lab_t2_bonus',c.lab.t2.bonus);val('#lab_t2_cap',c.lab.t2.cap);val('#lab_t2_del',c.lab.t2.del);val('#lab_t3_bonus',c.lab.t3.bonus);val('#lab_t3_cap',c.lab.t3.cap);val('#lab_t3_del',c.lab.t3.del);val('#lab_base_cap',c.lab.baseCap);val('#lab_base_del',c.lab.baseDel);}
   if(c.med){const m=c.med;val('#med_ph1_day_1h',m.ph1.day.h1);val('#med_ph1_day_2h',m.ph1.day.h2);val('#med_ph1_night_1h',m.ph1.night.h1);val('#med_ph1_night_2h',m.ph1.night.h2);val('#med_ph1_late_1h',m.ph1.late.h1);val('#med_ph1_late_2h',m.ph1.late.h2);val('#med_ph2_day_1h',m.ph2.day.h1);val('#med_ph2_day_2h',m.ph2.day.h2);val('#med_ph2_night_1h',m.ph2.night.h1);val('#med_ph2_night_2h',m.ph2.night.h2);val('#med_ph2_late_1h',m.ph2.late.h1);val('#med_ph2_late_2h',m.ph2.late.h2);val('#med_sh_day_1h',m.sh.day.h1);val('#med_sh_day_2h',m.sh.day.h2);val('#med_sh_night_1h',m.sh.night.h1);val('#med_sh_night_2h',m.sh.night.h2);val('#med_sh_late_1h',m.sh.late.h1);val('#med_sh_late_2h',m.sh.late.h2);}
   if(c.amb){val('#amb_day_1h',c.amb.day);val('#amb_night_1h',c.amb.night);}
-  if(c.stu){val('#stu_ph_day_1h',c.stu.ph.day);val('#stu_ph_night_1h',c.stu.ph.night);val('#stu_ph_late_1h',c.stu.ph.late);val('#stu_sh_day_1h',c.stu.sh.day);val('#stu_sh_night_1h',c.stu.sh.night);val('#stu_sh_late_1h',c.stu.sh.late);val('#stu_calls_day_1h',c.stu.calls.day);val('#stu_calls_night_1h',c.stu.calls.night);}
   if(c.ro){val('#ro_unscripted',c.ro.unscripted);val('#ro_scripted',c.ro.scripted);}
   if(c.fto){val('#fto_day1',c.fto.day1);val('#fto_day2',c.fto.day2);val('#fto_labtech',c.fto.labtech);val('#fto_refresher',c.fto.refresher);}
   if(c.hc){val('#hc_standby',c.hc.standby);}
@@ -531,13 +556,32 @@ function parseStudentsLine(line){
 function parseROLine(line){
   const pair=parseIdPair(line.trim());
   if(!pair)return null;
-  const r=pair.rest.toLowerCase();
-  const m=r.match(/(?:(\d+)\s*scripted)?[^\d]*(?:(\d+)\s*unscripted)?/);
-  if(!m)return null;
-  const scripted=m[1]?parseInt(m[1]):0;
-  const unscripted=m[2]?parseInt(m[2]):0;
-  if(scripted===0&&unscripted===0)return null;
-  return{id:pair.id,scripted,unscripted};
+  const r=pair.rest;
+  
+  // Parse RO operations + lobby/on-calls
+  const chunks=r.split('+').map(s=>s.trim()).filter(Boolean);
+  const result={id:pair.id,scripted:0,unscripted:0,dutyItems:[]};
+  
+  for(const c of chunks){
+    const cl=c.toLowerCase();
+    // Check for scripted/unscripted
+    const scriptedM=cl.match(/(\d+)\s*scripted/);
+    const unscriptedM=cl.match(/(\d+)\s*unscripted/);
+    if(scriptedM)result.scripted+=parseInt(scriptedM[1]);
+    if(unscriptedM)result.unscripted+=parseInt(unscriptedM[1]);
+    
+    // Check for duty hours (lobby/on-calls)
+    const dutyM=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)(?:\s+(day|night|late\s*night))?$/i);
+    if(dutyM){
+      const hours=parseInt(dutyM[1]);
+      const place=dutyM[2].trim().toUpperCase();
+      const shift=(dutyM[3]||'day').toLowerCase().replace(/\s+/g,' ');
+      result.dutyItems.push({id:pair.id,hours,place,shift});
+    }
+  }
+  
+  if(result.scripted===0&&result.unscripted===0&&result.dutyItems.length===0)return null;
+  return result;
 }
 
 function parseFTOLine(line){
@@ -562,7 +606,7 @@ function parseHCLine(line){
   const chunks=pair.rest.split('+').map(s=>s.trim()).filter(Boolean);
   const items=[];
   for(const c of chunks){
-    const m=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)(?:\s+(day|night|late\s*night))?/i);
+    const m=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)(?:\s+(day|night|late\s*night))?$/i);
     if(m){
       const hours=parseInt(m[1]);
       const place=m[2].trim().toUpperCase();
@@ -584,7 +628,7 @@ function labtechCascade(totalCaps,totalDels,cfg){
   return{parts,total};
 }
 
-/* Medical/Amb/HC/Stu shared logic */
+/* Medical/Amb/HC/Stu/RO shared logic using Medical Dept rates */
 function calcDutyHours(items,cfg){
   const byUser={};
   for(const it of items){
@@ -613,8 +657,8 @@ function calcDutyHours(items,cfg){
         const val=h*rate;
         total+=val;
         segments.push(`${h}H On Calls ${title(shift)} = ${toMoney(val)}`);
-      }else if(place==='PH1'||place==='PH2'||place==='SH'){
-        const p=(place==='PH1')?cfg.med.ph1:(place==='PH2')?cfg.med.ph2:cfg.med.sh;
+      }else if(place==='PH'||place==='PH1'||place==='PH2'||place==='SH'){
+        const p=(place==='PH'||place==='PH1')?cfg.med.ph1:(place==='PH2')?cfg.med.ph2:cfg.med.sh;
         const tier=(shift==='day')?p.day:(shift==='night')?p.night||p.day:(shift==='late night')?p.late||p.day:p.day;
         let left=h;
         const isLate=(place!=='SH')&&(shift==='late night');
@@ -643,55 +687,35 @@ function calcDutyHours(items,cfg){
   return{lines,grand};
 }
 
-/* Students calc */
-function studentsCalc(allItems,cfg){
-  const byUser={};
-  for(const items of allItems){
-    if(items){
-      for(const it of items){
-        if(!byUser[it.id])byUser[it.id]=[];
-        byUser[it.id].push(it);
-      }
-    }
-  }
-  const lines=[];
-  let grand=0;
-  for(const id of Object.keys(byUser)){
-    let total=0;
-    const seg=[];
-    for(const it of byUser[id]){
-      let per=0;
-      if(it.place==='PH')per=it.shift==='night'?cfg.stu.ph.night:it.shift==='late night'?cfg.stu.ph.late:cfg.stu.ph.day;
-      else if(it.place==='SH')per=it.shift==='night'?cfg.stu.sh.night:it.shift==='late night'?cfg.stu.sh.late:cfg.stu.sh.day;
-      else if(it.place==='ON CALLS')per=it.shift==='night'?cfg.stu.calls.night:cfg.stu.calls.day;
-      const val=it.hours*per;
-      total+=val;
-      seg.push(`${it.hours}H ${it.place} ${title(it.shift)} = ${toMoney(val)}`);
-    }
-    grand+=total;
-    lines.push({id,desc:seg.join(' + '),total});
-  }
-  return{lines,grand};
-}
-
-/* RO calc */
+/* RO calc with duty support */
 function roCalc(items,cfg){
   const byUser={};
   for(const it of items){
-    if(!byUser[it.id])byUser[it.id]={scripted:0,unscripted:0};
+    if(!byUser[it.id])byUser[it.id]={scripted:0,unscripted:0,dutyItems:[]};
     byUser[it.id].scripted+=it.scripted;
     byUser[it.id].unscripted+=it.unscripted;
+    if(it.dutyItems)byUser[it.id].dutyItems.push(...it.dutyItems);
   }
   const lines=[];
   let grand=0;
   for(const id of Object.keys(byUser)){
     const s=byUser[id].scripted;
     const u=byUser[id].unscripted;
-    const total=s*cfg.ro.scripted+u*cfg.ro.unscripted;
-    grand+=total;
+    let total=s*cfg.ro.scripted+u*cfg.ro.unscripted;
     const parts=[];
     if(s>0)parts.push(`${s} Scripted`);
     if(u>0)parts.push(`${u} Unscripted`);
+    
+    // Add duty hours
+    if(byUser[id].dutyItems.length>0){
+      const dutyCalc=calcDutyHours(byUser[id].dutyItems,cfg);
+      if(dutyCalc.lines.length>0){
+        total+=dutyCalc.lines[0].total;
+        parts.push(dutyCalc.lines[0].desc);
+      }
+    }
+    
+    grand+=total;
     lines.push({id,desc:parts.join(' + '),total});
   }
   return{lines,grand};
@@ -814,12 +838,14 @@ qs('#genAmbulance').addEventListener('click',()=>{
 qs('#genStudents').addEventListener('click',()=>{
   const cfg=gatherConfig();
   const lines=(qs('#rawStudents').value||'').split('\n');
-  const packages=[];
+  const allItems=[];
   for(const ln of lines){
     const items=parseStudentsLine(ln);
-    if(items)packages.push(items);
+    if(items){
+      for(const it of items)allItems.push(it);
+    }
   }
-  const{lines:rows,grand}=studentsCalc(packages,cfg);
+  const{lines:rows,grand}=calcDutyHours(allItems,cfg);
   let out=[`# 💸  Daily Bonus For <@&816985266115444756> 💸`,'','==================================================================',''];
   for(const r of rows){
     out.push(`<@${r.id}> — [${r.desc}] — **${toMoney(r.total)}**`);
@@ -829,7 +855,7 @@ qs('#genStudents').addEventListener('click',()=>{
   setStatus('✅ Students generated','text-green-600');
 });
 
-/* RO generate */
+/* RO generate with duty support */
 qs('#genRO').addEventListener('click',()=>{
   const cfg=gatherConfig();
   const lines=(qs('#rawRO').value||'').split('\n');
@@ -873,14 +899,12 @@ qs('#genFTO').addEventListener('click',()=>{
 qs('#genHC').addEventListener('click',()=>{
   const cfg=gatherConfig();
   const lines=(qs('#rawHC').value||'').split('\n');
-  const packages=[];
+  const allItems=[];
   for(const ln of lines){
     const items=parseHCLine(ln);
-    if(items)packages.push(items);
-  }
-  const allItems=[];
-  for(const pkg of packages){
-    for(const it of pkg)allItems.push(it);
+    if(items){
+      for(const it of items)allItems.push(it);
+    }
   }
   const{lines:rows,grand}=calcDutyHours(allItems,cfg);
   const author=qs('#author').value||'';
@@ -912,7 +936,9 @@ function copy(sel){
 /* Config Save */
 qs('#saveConfig').addEventListener('click',saveAll);
 qs('#saveAll').addEventListener('click',saveAll);
+qs('#syncCloud').addEventListener('click',syncCloud);
 qs('#clearAll').addEventListener('click',clearAll);
+qs('#exportConfig').addEventListener('click',exportConfig);
 
 /* Init */
 loadAll();
