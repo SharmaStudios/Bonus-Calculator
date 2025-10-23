@@ -112,7 +112,6 @@
       </div>
       <div class="flex flex-wrap gap-3 mt-4">
         <button id="saveAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm md:text-base">💾 Save All</button>
-        <button id="syncCloud" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm md:text-base">☁️ Sync Cloud</button>
         <button id="clearAll" class="btn flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 text-white text-sm md:text-base">🗑️ Clear All</button>
         <span id="status" class="text-xs md:text-sm font-bold flex items-center"></span>
       </div>
@@ -252,7 +251,7 @@
     <!-- CONFIG -->
     <section id="tab-config" class="space-y-6 hidden overflow-y-auto" style="max-height: 70vh;">
       <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-3 md:p-4 text-xs md:text-sm text-gray-700">
-        <strong>⚙️ Configuration:</strong> Edit all payouts and thresholds. Medical Students use Medical Department rates. Click Save All or Sync Cloud to persist globally.
+        <strong>⚙️ Configuration:</strong> Edit all payouts and thresholds. Medical Students use Medical Department rates. Click Save All to persist.
       </div>
 
       <!-- Labtech Config -->
@@ -285,7 +284,7 @@
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 md:mt-4">
-          <label class="text-xs md:text-sm font-semibold">Base per Captcha $ <input id="lab_base_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="8000"></label>
+          <label class="text-xs md:text-sm font-semibold">Base per Captcha $ <input id="lab_base_cap" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="4000"></label>
           <label class="text-xs md:text-sm font-semibold">Base per Delivery $ <input id="lab_base_del" type="number" class="w-full border-2 rounded-lg px-2 py-1.5 text-sm mt-1" value="5000"></label>
         </div>
       </div>
@@ -374,58 +373,16 @@
       <div class="pt-2 flex gap-3">
         <button id="saveConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm md:text-base">💾 Save Configuration</button>
         <button id="exportConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm md:text-base">📥 Export Config</button>
+        <button id="importConfig" class="btn px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-sm md:text-base">📤 Import Config</button>
       </div>
+      <input type="file" id="importFile" accept=".json" class="hidden">
     </section>
   </div>
 
 <script>
-/* Cloud Storage via JSONBin.io (free, GitHub Pages compatible) */
-const JSONBIN_API = 'https://api.jsonbin.io/v3/b';
-const JSONBIN_BIN_ID = '68f9308eae596e708f24bf0b'; // Create your bin at jsonbin.io
-const JSONBIN_KEY = '$2a$10$KbuiEOeV0xOm35GrS85/f.Ndm7KKCH/RXglKmAWGjiDPDc2dYR4.a'; // Replace with your API key
-
 /* Persistence */
 const KEY='ems_bonus_v3';
 const RAW_KEYS={lab:'raw_lab',med:'raw_med',amb:'raw_amb',stu:'raw_stu',ro:'raw_ro',fto:'raw_fto',hc:'raw_hc'};
-
-async function syncCloud(){
-  try{
-    setStatus('☁️ Syncing...','text-blue-600');
-    const cfg=gatherConfig();
-    const head={roles:qs('#roles').value,author:qs('#author').value,dateTitle:qs('#dateTitle').value,headerTitle:qs('#headerTitle').value};
-    
-    // Try to load from cloud first
-    try{
-      const resp = await fetch(`${JSONBIN_API}/${JSONBIN_BIN_ID}/latest`, {
-        headers: {'X-Access-Key': JSONBIN_KEY}
-      });
-      if(resp.ok){
-        const data = await resp.json();
-        if(data.record && data.record.cfg){
-          applyConfig(data.record.cfg);
-          setStatus('☁️ Loaded from cloud','text-green-600');
-          return;
-        }
-      }
-    }catch(e){}
-    
-    // If load fails, save to cloud
-    await fetch(`${JSONBIN_API}/${JSONBIN_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Key': JSONBIN_KEY
-      },
-      body: JSON.stringify({cfg, head, timestamp: Date.now()})
-    });
-    
-    localStorage.setItem(KEY,JSON.stringify({cfg,head}));
-    setStatus('☁️ Synced to cloud','text-green-600');
-  }catch(e){
-    setStatus('❌ Cloud sync failed, using local','text-red-600');
-    saveAll();
-  }
-}
 
 function saveAll(){
   const cfg=gatherConfig();
@@ -458,7 +415,8 @@ function clearAll(){
 
 function exportConfig(){
   const cfg=gatherConfig();
-  const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
+  const head={roles:qs('#roles').value,author:qs('#author').value,dateTitle:qs('#dateTitle').value,headerTitle:qs('#headerTitle').value};
+  const blob=new Blob([JSON.stringify({cfg,head},null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
@@ -466,6 +424,33 @@ function exportConfig(){
   a.click();
   setStatus('📥 Config exported','text-green-600');
 }
+
+function importConfig(){
+  qs('#importFile').click();
+}
+
+qs('#importFile').addEventListener('change',(e)=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(data.cfg)applyConfig(data.cfg);
+      if(data.head){
+        qs('#roles').value=data.head.roles||'';
+        qs('#author').value=data.head.author||'';
+        qs('#dateTitle').value=data.head.dateTitle||'';
+        qs('#headerTitle').value=data.head.headerTitle||'';
+      }
+      localStorage.setItem(KEY,JSON.stringify(data));
+      setStatus('📤 Config imported','text-green-600');
+    }catch(err){
+      setStatus('❌ Invalid config file','text-red-600');
+    }
+  };
+  reader.readAsText(file);
+});
 
 function setStatus(msg,cls){
   const el=qs('#status');
@@ -476,7 +461,7 @@ function setStatus(msg,cls){
 
 function qs(s){return document.querySelector(s);}
 function qsa(s){return[...document.querySelectorAll(s)];}
-function toMoney(n){return'$'+(n||0).toLocaleString();}
+function toMoney(n){return'$'+(n||0).toLocaleString('en-US');}
 function num(s){return parseInt(qs(s).value||'0',10);}
 function val(s,v){if(v!==undefined)qs(s).value=v;}
 
@@ -558,19 +543,16 @@ function parseROLine(line){
   if(!pair)return null;
   const r=pair.rest;
   
-  // Parse RO operations + lobby/on-calls
   const chunks=r.split('+').map(s=>s.trim()).filter(Boolean);
   const result={id:pair.id,scripted:0,unscripted:0,dutyItems:[]};
   
   for(const c of chunks){
     const cl=c.toLowerCase();
-    // Check for scripted/unscripted
     const scriptedM=cl.match(/(\d+)\s*scripted/);
     const unscriptedM=cl.match(/(\d+)\s*unscripted/);
     if(scriptedM)result.scripted+=parseInt(scriptedM[1]);
     if(unscriptedM)result.unscripted+=parseInt(unscriptedM[1]);
     
-    // Check for duty hours (lobby/on-calls)
     const dutyM=c.match(/(\d+)\s*h\s+([a-z0-9 ]+?)(?:\s+(day|night|late\s*night))?$/i);
     if(dutyM){
       const hours=parseInt(dutyM[1]);
@@ -628,7 +610,7 @@ function labtechCascade(totalCaps,totalDels,cfg){
   return{parts,total};
 }
 
-/* Medical/Amb/HC/Stu/RO shared logic using Medical Dept rates */
+/* Medical/Amb/HC/Stu/RO shared logic */
 function calcDutyHours(items,cfg){
   const byUser={};
   for(const it of items){
@@ -706,7 +688,6 @@ function roCalc(items,cfg){
     if(s>0)parts.push(`${s} Scripted`);
     if(u>0)parts.push(`${u} Unscripted`);
     
-    // Add duty hours
     if(byUser[id].dutyItems.length>0){
       const dutyCalc=calcDutyHours(byUser[id].dutyItems,cfg);
       if(dutyCalc.lines.length>0){
@@ -855,7 +836,7 @@ qs('#genStudents').addEventListener('click',()=>{
   setStatus('✅ Students generated','text-green-600');
 });
 
-/* RO generate with duty support */
+/* RO generate */
 qs('#genRO').addEventListener('click',()=>{
   const cfg=gatherConfig();
   const lines=(qs('#rawRO').value||'').split('\n');
@@ -936,9 +917,9 @@ function copy(sel){
 /* Config Save */
 qs('#saveConfig').addEventListener('click',saveAll);
 qs('#saveAll').addEventListener('click',saveAll);
-qs('#syncCloud').addEventListener('click',syncCloud);
 qs('#clearAll').addEventListener('click',clearAll);
 qs('#exportConfig').addEventListener('click',exportConfig);
+qs('#importConfig').addEventListener('click',importConfig);
 
 /* Init */
 loadAll();
