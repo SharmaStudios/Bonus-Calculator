@@ -787,7 +787,7 @@ qs('#genMedical').addEventListener('click',()=>{
     if(p)items.push(p);
   }
   const{lines:rows,grand}=calcDutyHours(items,cfg);
-  let out=[...generateHeader()];
+  let out=[`# <:EMS_Star:1319031331673342033>  Daily Bonuses For <@&848881823412256768> <:EMS_Star:1319031331673342033>`,'','==================================================================',''];
   for(const r of rows){
     out.push(`<@${r.id}>  - ${toMoney(r.total)} (${r.desc})`);
   }
@@ -806,7 +806,7 @@ qs('#genAmbulance').addEventListener('click',()=>{
     if(p)items.push(p);
   }
   const{lines:rows,grand}=calcDutyHours(items,cfg);
-  let out=[`# <:EMS_Star:1319031331673342033>  Daily Bonuses For Ambulance Service  <:EMS_Star:1319031331673342033>`,'','==================================================================',''];
+  let out=[`# <:EMS_Star:1319031331673342033>  Daily Bonuses For <@&848880402679988255> <:EMS_Star:1319031331673342033>`,'','==================================================================',''];
   for(const r of rows){
     out.push(`<@${r.id}> - ${toMoney(r.total)} (${r.desc})`);
   }
