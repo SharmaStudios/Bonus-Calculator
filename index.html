@@ -851,7 +851,7 @@ qs('#genRO').addEventListener('click',()=>{
   for(const r of rows){
     out.push(`<@${r.id}>  – ${toMoney(r.total)} (${r.desc})`);
   }
-  out.push('==================================================================','📩 Bonus missing? DM me with logs or bodycam proof','',`#  💰 Final Total: ${toMoney(grand)} 💰 <@&816725923810377758> Chief § Kizil Stonefield`);
+  out.push('==================================================================','📩 Bonus missing? DM me with logs or bodycam proof','',`#  💰 Final Total: ${toMoney(grand)} 💰 ${author}`);
   qs('#outRO').textContent=out.join('\n');
   setStatus('✅ RO generated','text-green-600');
 });
